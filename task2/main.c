@@ -6,7 +6,7 @@ typedef struct _ListElem {
   struct _ListElem *next;
 } ListElem;
 
-typedef struct _List { // Reference type
+typedef struct _List {
   ListElem *head;
 } List;
 
