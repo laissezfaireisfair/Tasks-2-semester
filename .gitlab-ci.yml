@@ -1,0 +1,6 @@
+stages:
+  - compile
+
+compile:
+  stage: compile
+  script: make compile

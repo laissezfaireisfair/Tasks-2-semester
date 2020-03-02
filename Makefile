@@ -1,6 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -pedantic
 
+compile: build_task1
+
 task1: build_task1
 	echo "\n"
 	cat task1/input.txt
