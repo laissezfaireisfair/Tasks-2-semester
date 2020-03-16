@@ -41,8 +41,10 @@ AdjacencyList read_graph_from_file(char const *filename) {
 void mark_connected(AdjacencyList const graph, unsigned int const vertex, char *visited) {
   visited[vertex] = 1;
   for (ListElem *i = graph.body[vertex].head; i != NULL; i = i->next) {
-    visited[i->value] = 1;
-    mark_connected(graph, i->value, visited);
+    if (visited[i->value] == 0) {
+      visited[i->value] = 1;
+      mark_connected(graph, i->value, visited);
+    }
   }
 }
 
