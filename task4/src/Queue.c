@@ -17,3 +17,9 @@ unsigned int pop(Queue *queue) {
 void delete_queue(Queue *queue) {
   delete_list(&queue->body);
 }
+
+int is_queue_empty(Queue const queue) {
+  if (queue.body.head == NULL)
+    return 1;
+  return 0;
+}
