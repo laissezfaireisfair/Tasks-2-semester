@@ -29,7 +29,7 @@ int is_acyclic(AdjacencyList const graph) {
   Queue queue = make_queue();
   unsigned int const startVertex = 0;
   push(&queue, startVertex);
-  while (is_queue_empty(queue)) {
+  while (!is_queue_empty(queue)) {
     unsigned int const nextVertex = pop(&queue);
     for (ListElem *i = graph.body[nextVertex].head; i != NULL; i = i->next) {
       unsigned int const neighbourVertex = i->value;
