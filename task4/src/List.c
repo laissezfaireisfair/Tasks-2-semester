@@ -1,3 +1,4 @@
+#include <assert.h>
 #include "List.h"
 
 List make_list() {
@@ -14,15 +15,23 @@ void push_front(List *list, unsigned int const value) {
 }
 
 unsigned int pop_back(List *list) {
-  for (ListElem *i = list->head; i->next != NULL; i = i->next) {
-    if (i->next->next == NULL) {
-      unsigned int const lastValue = i->next->value;
-      free(i->next);
-      i->next = NULL;
-      return lastValue;
-    }
+  assert(list->head != NULL);
+
+  // Deleting last element case
+  if (list->head->next == NULL) {
+    unsigned int const lastValue = list->head->value;
+    free(list->head);
+    list->head = NULL;
+    return lastValue;
   }
-  exit(1); // Case of wrong initialised list
+
+  // Deleting non-last element case
+  ListElem *preLast;
+  for (preLast = list->head; preLast->next->next != NULL; preLast = preLast->next);
+  unsigned int const lastValue = preLast->next->value;
+  free(preLast->next);
+  preLast->next = NULL;
+  return lastValue;
 }
 
 void delete_list(List *list) {
