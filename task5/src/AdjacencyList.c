@@ -12,7 +12,7 @@ void add_edge(AdjacencyList *graph, unsigned int const begin, unsigned int const
 }
 
 void add_edges(AdjacencyList *graph, unsigned int const begin, List const ends) {
-  for (ListElem *end = ends->head; end != NULL; end = end->next)
+  for (ListElem *end = ends.head; end != NULL; end = end->next)
     push_front(graph->body + begin, end->value);
 }
 
