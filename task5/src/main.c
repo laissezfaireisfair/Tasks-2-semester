@@ -29,6 +29,16 @@ AdjacencyList read_graph_from_file(char const *filename) {
   return graph;
 }
 
+List get_articulation_points(AdjacencyList const graph);
+
+void print_list(List const list);
+
 int main() {
+  char const *INPUT_FILE_NAME = "input.txt";
+  AdjacencyList graph = read_graph_from_file(INPUT_FILE_NAME);
+  List articulationPoints = get_articulation_points(graph);
+  delete_adjacency_list(&graph);
+  print_list(articulationPoints);
+  delete_list(articulationPoints);
   return 0;
 }
