@@ -1,10 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include "Errors.h"
 #include "List.h"
 #include "AdjacencyList.h"
-#include "Sequence.h"
-#include "Permutations.h"
 
 List string_to_list(char const *str) {
   List list = make_list();
