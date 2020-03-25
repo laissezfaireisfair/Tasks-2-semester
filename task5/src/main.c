@@ -31,14 +31,20 @@ AdjacencyList read_graph_from_file(char const *filename) {
 
 List get_articulation_points(AdjacencyList const graph);
 
-void print_list(List const list);
+void print_list(FILE *fout, List const list) {
+  for (ListElem *i = list.head; i != NULL; i = i->next)
+    fprintf(fout, "%u ", i->value);
+}
 
 int main() {
-  char const *INPUT_FILE_NAME = "input.txt";
+  char const *INPUT_FILE_NAME  = "input.txt";
+  char const *OUTPUT_FILE_NAME = "output.txt";
   AdjacencyList graph = read_graph_from_file(INPUT_FILE_NAME);
   List articulationPoints = get_articulation_points(graph);
   delete_adjacency_list(&graph);
-  print_list(articulationPoints);
+  FILE *fout = fopen(OUTPUT_FILE_NAME, "w");
+  print_list(fout, articulationPoints);
+  fclose(fout);
   delete_list(articulationPoints);
   return 0;
 }
