@@ -11,6 +11,11 @@ void add_edge(AdjacencyList *graph, unsigned int const begin, unsigned int const
   push_front(graph->body + begin, end);
 }
 
+void add_edges(AdjacencyList *graph, unsigned int const begin, List const ends) {
+  for (ListElem *end = ends->head; end != NULL; end = end->next)
+    push_front(graph->body + begin, end->value);
+}
+
 void delete_adjacency_list(AdjacencyList *graph) {
   for (unsigned int i = 0; i < graph->size; ++i)
     delete_list(graph->body + i);
