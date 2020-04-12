@@ -8,8 +8,8 @@ typedef struct _AdjacencyList {
   List *body;
 } AdjacencyList;
 
-AdjacencyList make_adj_list(valType const size);
+AdjacencyList make_adj_list(unsigned int const size);
 
-void add_edge(AdjacencyList *graph, valType const begin, valType const end);
+void add_edge(AdjacencyList *graph, unsigned int const begin, unsigned int const end);
 
 void delete_adjacency_list(AdjacencyList *graph);
