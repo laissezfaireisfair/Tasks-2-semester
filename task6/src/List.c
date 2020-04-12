@@ -25,7 +25,8 @@ void push_back(List *list, unsigned int const value) {
   }
 
   ListElem *last;
-  for (ListElem *i = list->head; i->next != NULL; i = i->next, last = i);
+  for (ListElem *i = list->head; i != NULL; i = i->next)
+    last = i;
   last->next = newElem;
 }
 

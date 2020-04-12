@@ -110,9 +110,9 @@ List get_Euler_path(Matrix * graph, unsigned int const badVertex1, unsigned int 
   add_edge(graph, badVertex1, badVertex2); // Adding fake edge to make cycle
   List cycle = get_Euler_cycle(graph);
   List path = make_list();
-  ListElem *firstBadVertex;
+  ListElem *firstBadVertex = cycle.head;
   for (ListElem *i = cycle.head; i->value != badVertex1 && i->value != badVertex2; i = i->next)
-    firstBadVertex = i;
+    firstBadVertex = i->next;
   ListElem *lastBadVertex = firstBadVertex->next;
   for (ListElem *i = lastBadVertex; i != NULL; i = i->next)
     push_back(&path, i->value);
