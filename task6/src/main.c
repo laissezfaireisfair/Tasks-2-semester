@@ -55,9 +55,9 @@ error read_graph_from_file(char const *filename, AdjacencyList * graph) {
       return BAD_INPUT;
     }
     add_edge(graph, begin, end);
+    add_edge(graph, end, begin);
   }
 
-  delete_adjacency_list(graph);
   fclose(fin);
   return OK;
 }

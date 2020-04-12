@@ -60,9 +60,6 @@ unsigned int pop_front(List *list) {
 }
 
 void delete_list(List *list) {
-  for (ListElem *i = list->head; i != NULL;) {
-    ListElem *next = i->next;
-    free(i);
-    i = next;
-  }
+  while (list->head != NULL)
+    pop_front(list);
 }
