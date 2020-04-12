@@ -129,7 +129,7 @@ int main() {
 
   if (type == NO_PATH) {
     FILE *fout = fopen(outputFilename, "w");
-    fprintf(fout, "NO");
+    fprintf(fout, "NO\n");
     fclose(fout);
     delete_adjacency_list(&graph);
     return 0;
@@ -144,6 +144,7 @@ int main() {
   FILE *fout = fopen(outputFilename, "w");
   for (ListElem *i = eulerPath.head; i != NULL; i = i->next)
     fprintf(fout, "%u ", i->value);
+  fprintf(fout, "\n");
   fclose(fout);
   delete_adjacency_list(&graph);
   return 0;
