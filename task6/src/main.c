@@ -55,7 +55,6 @@ error read_graph_from_file(char const *filename, Matrix * graph) {
       return BAD_INPUT;
     }
     add_edge(graph, begin, end);
-    add_edge(graph, end, begin);
   }
 
   fclose(fin);
@@ -97,10 +96,9 @@ List get_Euler_cycle(Matrix * graph) {
     unsigned int const vertex = pop_from_stack(&stack);
     push_front(&path, vertex);
     for (unsigned int i = 0; i < graph->size; ++i) {
-      if (graph->body[vertex][i] == 1) {
+      if (check_edge(graph, vertex, i)) {
         push_to_stack(&stack, i);
-        graph->body[vertex][i] = 0;
-        graph->body[i][vertex] = 0;
+        del_edge(graph, vertex, i);
       }
     }
   }
@@ -113,7 +111,8 @@ List get_Euler_path(Matrix * graph, unsigned int const badVertex1, unsigned int 
   List cycle = get_Euler_cycle(graph);
   List path = make_list();
   ListElem *firstBadVertex;
-  for (ListElem *i = cycle.head; i->value != badVertex1 && i->value != badVertex2; i = i->next, firstBadVertex = i);
+  for (ListElem *i = cycle.head; i->value != badVertex1 && i->value != badVertex2; i = i->next)
+    firstBadVertex = i;
   ListElem *lastBadVertex = firstBadVertex->next;
   for (ListElem *i = lastBadVertex; i != NULL; i = i->next)
     push_back(&path, i->value);
