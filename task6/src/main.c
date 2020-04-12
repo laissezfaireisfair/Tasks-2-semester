@@ -62,7 +62,20 @@ error read_graph_from_file(char const *filename, AdjacencyList * graph) {
 
 typedef enum _Boolean {FALSE, TRUE} Boolean;
 
-Boolean does_contain_Euler_path(AdjacencyList const graph);
+Boolean does_contain_Euler_path(AdjacencyList const graph) {
+  unsigned int counterUnevenDegree = 0;
+  for (unsigned int i = 0; i < graph.size; ++i) {
+    List *neighbours = graph.body[i];
+    unsigned int degree = 0;
+    for (ListElem *j = neighbours->head; j != NULL; j = j->next)
+      ++degree;
+    if (degree % 2 == 1)
+      ++counterUnevenDegree;
+  }
+  if (counterUnevenDegree == 0 || counterUnevenDegree == 2)
+    return TRUE;
+  return FALSE;
+}
 
 // Warning: It destroyes graph
 error get_Euler_path(AdjacencyList * graph, List * path);
