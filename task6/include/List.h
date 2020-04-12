@@ -14,6 +14,8 @@ List make_list();
 
 void push_front(List *list, unsigned int const value);
 
+void push_back(List *list, unsigned int const value);
+
 unsigned int pop_back(List *list);
 
 unsigned int pop_front(List *list);

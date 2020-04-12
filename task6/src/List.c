@@ -14,6 +14,21 @@ void push_front(List *list, unsigned int const value) {
   list->head = newElem;
 }
 
+void push_back(List *list, unsigned int const value) {
+  ListElem *newElem = (ListElem*)malloc(sizeof(ListElem));
+  newElem->value = value;
+  newElem->next = NULL;
+
+  if (list->head == NULL) {
+    list->head = newElem;
+    return;
+  }
+
+  ListElem *last;
+  for (ListElem *i = list->head; i->next != NULL; i = i->next, last = i);
+  last->next = newElem;
+}
+
 unsigned int pop_back(List *list) {
   assert(list->head != NULL);
 
