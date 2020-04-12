@@ -12,8 +12,8 @@ void add_edge(AdjacencyList *graph, unsigned int const begin, unsigned int const
 }
 
 int check_edge(AdjacencyList *graph, unsigned int const begin, unsigned int const end) {
-  List * neighbours = graph->body[begin];
-  for (ListElem * i = neighbours->head; i != NULL; i = i->next) {
+  List neighbours = graph->body[begin];
+  for (ListElem * i = neighbours.head; i != NULL; i = i->next) {
     if (i->value == end)
       return 1;
   }
@@ -21,8 +21,8 @@ int check_edge(AdjacencyList *graph, unsigned int const begin, unsigned int cons
 }
 
 void delete_edge(AdjacencyList *graph, unsigned int const begin, unsigned int const end) {
-  List * neighbours = graph->body[begin];
-  for (ListElem * i = neighbours->head; i->next != NULL; i = i->next) {
+  List neighbours = graph->body[begin];
+  for (ListElem * i = neighbours.head; i->next != NULL; i = i->next) {
     if (i->next->value == end) {
       ListElem *next = i->next->next;
       free(i->next);

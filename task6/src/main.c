@@ -65,9 +65,9 @@ typedef enum _Boolean {FALSE, TRUE} Boolean;
 Boolean does_contain_Euler_path(AdjacencyList const graph) {
   unsigned int counterUnevenDegree = 0;
   for (unsigned int i = 0; i < graph.size; ++i) {
-    List *neighbours = graph.body[i];
+    List neighbours = graph.body[i];
     unsigned int degree = 0;
-    for (ListElem *j = neighbours->head; j != NULL; j = j->next)
+    for (ListElem *j = neighbours.head; j != NULL; j = j->next)
       ++degree;
     if (degree % 2 == 1)
       ++counterUnevenDegree;
@@ -85,7 +85,7 @@ int main() {
   char const * const outputFilename = "output.txt";
 
   AdjacencyList graph;
-  error readStatus = read_graph_from_file(input, graph);
+  error readStatus = read_graph_from_file(inputFilename, &graph);
   if (readStatus != OK) {
     print_error(outputFilename, readStatus);
     return 1;
@@ -100,7 +100,7 @@ int main() {
   }
 
   List eulerPath = make_list();
-  error const gettingPathStatus = get_Euler_path(graph, &eulerPath);
+  error const gettingPathStatus = get_Euler_path(&graph, &eulerPath);
   if (gettingPathStatus != OK) {
     print_error(outputFilename, gettingPathStatus);
     delete_adjacency_list(&graph);
@@ -108,7 +108,7 @@ int main() {
   }
 
   FILE *fout = fopen(outputFilename, "w");
-  for (ListElem *i = eulerPath->head; i != NULL; i = i->next)
+  for (ListElem *i = eulerPath.head; i != NULL; i = i->next)
     fprintf(fout, "%u ", i->value);
   fclose(fout);
   delete_adjacency_list(&graph);
