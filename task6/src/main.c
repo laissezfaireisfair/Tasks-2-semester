@@ -85,28 +85,21 @@ GraphType does_contain_Euler_path(Matrix const graph, unsigned int * badVertex1,
 }
 
 // Warning: It destroyes graph
-List get_Euler_cycle(Matrix * graph) {
-  Stack stack = make_stack();
-  unsigned int const startVertex = 0;
-  List path = make_list();
-  push_to_stack(&stack, startVertex);
-  while (!is_stack_empty(stack)) {
-    unsigned int const vertex = pop_from_stack(&stack);
-    push_back(&path, vertex);
-    for (unsigned int i = 0; i < graph->size; ++i) {
-      if (check_edge(graph, vertex, i)) {
-        push_to_stack(&stack, i);
-        del_edge(graph, vertex, i);
-      }
+void get_Euler_cycle(Matrix * graph, unsigned int const vertex, List *path) {
+  for (unsigned int i = 0; i < graph->size; ++i) {
+    if (check_edge(graph, vertex, i)) {
+      del_edge(graph, vertex, i);
+      get_Euler_cycle(graph, i, path);
     }
   }
-  return path;
+  push_back(path, vertex);
 }
 
 // Warning: It destroyes graph
 List get_Euler_path(Matrix * graph, unsigned int const badVertex1, unsigned int const badVertex2) {
   add_edge(graph, badVertex1, badVertex2); // Adding fake edge to make cycle
-  List cycle = get_Euler_cycle(graph);
+  List cycle = make_list();
+  get_Euler_cycle(graph, 0, &cycle);
   List path = make_list();
   ListElem *firstBadVertex = cycle.head;
   for (ListElem *i = cycle.head; i->value != badVertex1 && i->value != badVertex2; i = i->next)
@@ -146,7 +139,7 @@ int main() {
   if (type == PATH)
     eulerPath = get_Euler_path(&graph, badVertex1, badVertex2);
   else
-    eulerPath = get_Euler_cycle(&graph);
+    get_Euler_cycle(&graph, 0, &eulerPath);
 
   FILE *fout = fopen(outputFilename, "w");
   for (ListElem *i = eulerPath.head; i != NULL; i = i->next)
