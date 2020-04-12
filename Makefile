@@ -37,7 +37,7 @@ task6:  task6/input.txt task6/main.out
 	echo "\n"
 	cat task6/input.txt
 	echo "\n"
-	(cd task6 && ./main.out)
+	(cd task6 && ./main.out && cat output.txt)
 
 task1/main.out: task1/main.c
 	$(CC) $(CFLAGS) -g $< -o $@
