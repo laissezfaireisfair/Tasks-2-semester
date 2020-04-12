@@ -72,8 +72,13 @@ GraphType does_contain_Euler_path(Matrix const graph, unsigned int * badVertex1,
       if (check_edge(&graph, i, j))
         ++degree;
     }
-    if (degree == 1)
+    if (degree % 2 == 1) {
+      if (counterUnevenDegree == 0)
+        *badVertex1 = i;
+      else
+        *badVertex2 = i;
       ++counterUnevenDegree;
+    }
   }
   if (counterUnevenDegree == 0)
     return CYCLE;
