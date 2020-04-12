@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "Errors.h"
 #include "List.h"
+#include "Stack.h"
 #include "AdjacencyList.h"
 
 error count_graph_size(FILE * fin, unsigned int * size) {
@@ -62,7 +63,7 @@ error read_graph_from_file(char const *filename, AdjacencyList * graph) {
 
 typedef enum _GraphType {NO_PATH, PATH, CYCLE} GraphType; // Euler path existing
 
-GraphType does_contain_Euler_path(AdjacencyList const graph, unsigned int & badVertex1, unsigned int & badVertex2) {
+GraphType does_contain_Euler_path(AdjacencyList const graph, unsigned int * badVertex1, unsigned int * badVertex2) {
   unsigned int counterUnevenDegree = 0;
   for (unsigned int i = 0; i < graph.size; ++i) {
     List neighbours = graph.body[i];
@@ -80,21 +81,6 @@ GraphType does_contain_Euler_path(AdjacencyList const graph, unsigned int & badV
 }
 
 // Warning: It destroyes graph
-List get_Euler_path(AdjacencyList * graph, unsigned int const badVertex1, unsigned int const badVertex2) {
-  add_edge(&graph, start, end); // Adding fake edge to make cycle
-  List cycle = get_Euler_cycle(graph);
-  List path = make_list();
-  ListElem *firstBadVertex;
-  for (ListElem *i = cycle.head; i->value != badVertex1 && i->value != badVertex2; i = i->next, firstBadVertex = i);
-  ListElem *lastBadVertex = firstBadVertex->next;
-  for (ListElem *i = lastBadVertex; i != NULL; i = i->next)
-    push_back(path, i->value);
-  for (ListElem *i = cycle.head; i != firstBadVertex; i = i->next)
-    push_back(path, i->value);
-  return path;
-}
-
-// Warning: It destroyes graph
 List get_Euler_cycle(AdjacencyList * graph) {
   Stack stack = make_stack();
   unsigned int const startVertex = 0;
@@ -102,11 +88,27 @@ List get_Euler_cycle(AdjacencyList * graph) {
   push_to_stack(&stack, startVertex);
   while (!is_stack_empty(stack)) {
     unsigned int const vertex = pop_from_stack(&stack);
-    push_front(path, vertex);
-    for (ListElem *i = graph->body[vertex]->head; i != NULL; i = i->next)
+    push_front(&path, vertex);
+    for (ListElem *i = graph->body[vertex].head; i != NULL; i = i->next)
       push_to_stack(&stack, i->value);
-    delete_list(graph->body[vertex]);
+    delete_list(&graph->body[vertex]);
   }
+  return path;
+}
+
+// Warning: It destroyes graph
+List get_Euler_path(AdjacencyList * graph, unsigned int const badVertex1, unsigned int const badVertex2) {
+  add_edge(graph, badVertex1, badVertex2); // Adding fake edge to make cycle
+  List cycle = get_Euler_cycle(graph);
+  List path = make_list();
+  ListElem *firstBadVertex;
+  for (ListElem *i = cycle.head; i->value != badVertex1 && i->value != badVertex2; i = i->next, firstBadVertex = i);
+  ListElem *lastBadVertex = firstBadVertex->next;
+  for (ListElem *i = lastBadVertex; i != NULL; i = i->next)
+    push_back(&path, i->value);
+  for (ListElem *i = cycle.head; i != firstBadVertex; i = i->next)
+    push_back(&path, i->value);
+  return path;
 }
 
 int main() {
@@ -120,7 +122,9 @@ int main() {
     return 1;
   }
 
-  GraphType const type = does_contain_Euler_path(graph);
+  unsigned int badVertex1, badVertex2;
+
+  GraphType const type = does_contain_Euler_path(graph, &badVertex1, &badVertex2);
 
   if (type == NO_PATH) {
     FILE *fout = fopen(outputFilename, "w");
@@ -131,11 +135,10 @@ int main() {
   }
 
   List eulerPath = make_list();
-  error gettingPathStatus;
   if (type == PATH)
-    eulerPath = get_Euler_path(&graph, &eulerPath);
+    eulerPath = get_Euler_path(&graph, badVertex1, badVertex2);
   else
-    eulerPath = get_Euler_cycle(&graph, &eulerPath);
+    eulerPath = get_Euler_cycle(&graph);
 
   FILE *fout = fopen(outputFilename, "w");
   for (ListElem *i = eulerPath.head; i != NULL; i = i->next)
