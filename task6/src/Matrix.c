@@ -26,13 +26,15 @@ void delete_matrix(Matrix *this) {
 void add_edge(Matrix *this, unsigned int const begin, unsigned int const end) {
   if (begin >= this->size || end >= this->size)
     exit(INVALID_ARGUMENT);
-  ++this->body[begin][end];
+  this->body[begin][end] += 1;
+  this->body[end][begin] += 1;
 }
 
 void del_edge(Matrix *this, unsigned int const begin, unsigned int const end) {
   if (begin >= this->size || end >= this->size)
     exit(INVALID_ARGUMENT);
-  --this->body[begin][end];
+  this->body[begin][end] -= 1;
+  this->body[end][begin] -= 1;
 }
 
 int check_edge(Matrix const *this, unsigned int const begin, unsigned int const end) {
