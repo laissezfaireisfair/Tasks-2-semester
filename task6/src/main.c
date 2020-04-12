@@ -6,6 +6,7 @@
 #include "AdjacencyList.h"
 
 error count_graph_size(FILE * fin, unsigned int * size) {
+  *size = 0;
   unsigned int numEdges;
   fscanf(fin, "%u\n", &numEdges);
 
