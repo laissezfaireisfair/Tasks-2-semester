@@ -1,8 +1,6 @@
 #pragma once
 #include <stdlib.h>
 
-typedef int unsigned int;
-
 typedef struct _ListElem {
   unsigned int value;
   struct _ListElem *next;
