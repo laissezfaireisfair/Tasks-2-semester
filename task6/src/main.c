@@ -60,6 +60,44 @@ error read_graph_from_file(char const *filename, AdjacencyList * graph) {
   return OK;
 }
 
+typedef enum _Boolean {FALSE, TRUE} Boolean;
+
+Boolean does_contain_Euler_path(AdjacencyList const graph);
+
+// Warning: It destroyes graph
+error get_Euler_path(AdjacencyList * graph, List * path);
+
 int main() {
+  char const * const inputFilename  = "input.txt";
+  char const * const outputFilename = "output.txt";
+
+  AdjacencyList graph;
+  error readStatus = read_graph_from_file(input, graph);
+  if (readStatus != OK) {
+    print_error(outputFilename, readStatus);
+    return 1;
+  }
+
+  if (does_contain_Euler_path(graph) == FALSE) {
+    FILE *fout = fopen(outputFilename, "w");
+    fprintf(fout, "NO");
+    fclose(fout);
+    delete_adjacency_list(&graph);
+    return 0;
+  }
+
+  List eulerPath = make_list();
+  error const gettingPathStatus = get_Euler_path(graph, &eulerPath);
+  if (gettingPathStatus != OK) {
+    print_error(outputFilename, gettingPathStatus);
+    delete_adjacency_list(&graph);
+    return 2;
+  }
+
+  FILE *fout = fopen(outputFilename, "w");
+  for (ListElem *i = eulerPath->head; i != NULL; i = i->next)
+    fprintf(fout, "%u ", i->value);
+  fclose(fout);
+  delete_adjacency_list(&graph);
   return 0;
 }
