@@ -67,10 +67,8 @@ GraphType does_contain_Euler_path(Matrix const graph, unsigned int * badVertex1,
   unsigned int counterUnevenDegree = 0;
   for (unsigned int i = 0; i < graph.size; ++i) {
     unsigned int degree = 0;
-    for (unsigned int j = 0; j < graph.size; ++j) {
-      if (check_edge(&graph, i, j))
-        ++degree;
-    }
+    for (unsigned int j = 0; j < graph.size; ++j)
+      degree += check_edge(&graph, i, j);
     if (degree % 2 == 1) {
       if (counterUnevenDegree == 0)
         *badVertex1 = i;
@@ -94,7 +92,7 @@ List get_Euler_cycle(Matrix * graph) {
   push_to_stack(&stack, startVertex);
   while (!is_stack_empty(stack)) {
     unsigned int const vertex = pop_from_stack(&stack);
-    push_front(&path, vertex);
+    push_back(&path, vertex);
     for (unsigned int i = 0; i < graph->size; ++i) {
       if (check_edge(graph, vertex, i)) {
         push_to_stack(&stack, i);
