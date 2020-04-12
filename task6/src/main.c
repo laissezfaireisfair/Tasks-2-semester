@@ -3,7 +3,7 @@
 #include "Errors.h"
 #include "List.h"
 #include "Stack.h"
-#include "AdjacencyList.h"
+#include "Matrix.h"
 
 error count_graph_size(FILE * fin, unsigned int * size) {
   *size = 0;
@@ -30,13 +30,13 @@ error count_graph_size(FILE * fin, unsigned int * size) {
   return OK;
 }
 
-error read_graph_from_file(char const *filename, AdjacencyList * graph) {
+error read_graph_from_file(char const *filename, Matrix * graph) {
   FILE *fin = fopen(filename, "r");
   unsigned int size;
   error const statusCounting = count_graph_size(fin, &size);
   if (statusCounting != OK)
     return statusCounting;
-  *graph = make_adj_list(size);
+  *graph = init_matrix(size);
 
   unsigned int numEdges;
   fscanf(fin, "%u\n", &numEdges);
@@ -44,13 +44,13 @@ error read_graph_from_file(char const *filename, AdjacencyList * graph) {
     unsigned int begin, end;
     int const readBeginStatus = fscanf(fin, "%u", &begin);
     if (readBeginStatus == EOF || readBeginStatus == 0) {
-      delete_adjacency_list(graph);
+      delete_matrix(graph);
       fclose(fin);
       return BAD_INPUT;
     }
     int const readEndStatus = fscanf(fin, "%u", &end);
     if (readEndStatus == EOF || readEndStatus == 0) {
-      delete_adjacency_list(graph);
+      delete_matrix(graph);
       fclose(fin);
       return BAD_INPUT;
     }
@@ -64,14 +64,15 @@ error read_graph_from_file(char const *filename, AdjacencyList * graph) {
 
 typedef enum _GraphType {NO_PATH, PATH, CYCLE} GraphType; // Euler path existing
 
-GraphType does_contain_Euler_path(AdjacencyList const graph, unsigned int * badVertex1, unsigned int * badVertex2) {
+GraphType does_contain_Euler_path(Matrix const graph, unsigned int * badVertex1, unsigned int * badVertex2) {
   unsigned int counterUnevenDegree = 0;
   for (unsigned int i = 0; i < graph.size; ++i) {
-    List neighbours = graph.body[i];
     unsigned int degree = 0;
-    for (ListElem *j = neighbours.head; j != NULL; j = j->next)
-      ++degree;
-    if (degree % 2 == 1)
+    for (unsigned int j = 0; j < graph.size; ++j) {
+      if (check_edge(&graph, i, j))
+        ++degree;
+    }
+    if (degree == 1)
       ++counterUnevenDegree;
   }
   if (counterUnevenDegree == 0)
@@ -82,7 +83,7 @@ GraphType does_contain_Euler_path(AdjacencyList const graph, unsigned int * badV
 }
 
 // Warning: It destroyes graph
-List get_Euler_cycle(AdjacencyList * graph) {
+List get_Euler_cycle(Matrix * graph) {
   Stack stack = make_stack();
   unsigned int const startVertex = 0;
   List path = make_list();
@@ -90,15 +91,19 @@ List get_Euler_cycle(AdjacencyList * graph) {
   while (!is_stack_empty(stack)) {
     unsigned int const vertex = pop_from_stack(&stack);
     push_front(&path, vertex);
-    for (ListElem *i = graph->body[vertex].head; i != NULL; i = i->next)
-      push_to_stack(&stack, i->value);
-    delete_list(&graph->body[vertex]);
+    for (unsigned int i = 0; i < graph->size; ++i) {
+      if (graph->body[vertex][i] == 1) {
+        push_to_stack(&stack, i);
+        graph->body[vertex][i] = 0;
+        graph->body[i][vertex] = 0;
+      }
+    }
   }
   return path;
 }
 
 // Warning: It destroyes graph
-List get_Euler_path(AdjacencyList * graph, unsigned int const badVertex1, unsigned int const badVertex2) {
+List get_Euler_path(Matrix * graph, unsigned int const badVertex1, unsigned int const badVertex2) {
   add_edge(graph, badVertex1, badVertex2); // Adding fake edge to make cycle
   List cycle = get_Euler_cycle(graph);
   List path = make_list();
@@ -116,7 +121,7 @@ int main() {
   char const * const inputFilename  = "input.txt";
   char const * const outputFilename = "output.txt";
 
-  AdjacencyList graph;
+  Matrix graph;
   error readStatus = read_graph_from_file(inputFilename, &graph);
   if (readStatus != OK) {
     print_error(outputFilename, readStatus);
@@ -131,7 +136,7 @@ int main() {
     FILE *fout = fopen(outputFilename, "w");
     fprintf(fout, "NO\n");
     fclose(fout);
-    delete_adjacency_list(&graph);
+    delete_matrix(&graph);
     return 0;
   }
 
@@ -146,6 +151,6 @@ int main() {
     fprintf(fout, "%u ", i->value);
   fprintf(fout, "\n");
   fclose(fout);
-  delete_adjacency_list(&graph);
+  delete_matrix(&graph);
   return 0;
 }

@@ -54,7 +54,7 @@ task4/main.out:  task4/src/main.c task4/src/AdjacencyList.c task4/src/List.c tas
 task5/main.out:  task5/src/main.c
 	$(CC) $(CFLAGS) -g task5/src/*.c -o $@ -I task5/include/
 
-task6/main.out:  task6/src/main.c task6/src/AdjacencyList.c task6/src/List.c task6/src/Errors.c task6/include/AdjacencyList.h task6/include/List.h task6/include/Errors.h
+task6/main.out:  task6/src/main.c task6/src/Matrix.c task6/src/List.c task6/src/Errors.c task6/include/Matrix.h task6/include/List.h task6/include/Errors.h
 	$(CC) $(CFLAGS) -g task6/src/*.c -o $@ -I task6/include/
 
 clean:
