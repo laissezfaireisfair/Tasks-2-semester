@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "Errors.h"
 #include "Matrix.h"
 
@@ -41,4 +42,60 @@ int check_edge(Matrix const *this, unsigned int const begin, unsigned int const 
   if (begin >= this->size || end >= this->size)
     exit(INVALID_ARGUMENT);
   return this->body[begin][end];
+}
+
+error count_graph_size(FILE * fin, unsigned int * size) {
+  *size = 0;
+  unsigned int numEdges;
+  fscanf(fin, "%u\n", &numEdges);
+
+  for (unsigned int i = 0; i < numEdges; ++i) {
+    unsigned int begin, end;
+
+    int const readBeginStatus = fscanf(fin, "%u", &begin);
+    if (readBeginStatus == EOF || readBeginStatus == 0)
+      return BAD_INPUT;
+    if (begin + 1 > *size)
+      *size = begin + 1;
+
+    int const readEndStatus = fscanf(fin, "%u", &end);
+    if (readEndStatus == EOF || readEndStatus == 0)
+      return BAD_INPUT;
+    if (end + 1 > *size)
+      *size = end + 1;
+  }
+
+  rewind(fin);
+  return OK;
+}
+
+error read_graph_from_file(char const *filename, Matrix * graph) {
+  FILE *fin = fopen(filename, "r");
+  unsigned int size;
+  error const statusCounting = count_graph_size(fin, &size);
+  if (statusCounting != OK)
+    return statusCounting;
+  *graph = init_matrix(size);
+
+  unsigned int numEdges;
+  fscanf(fin, "%u\n", &numEdges);
+  for (unsigned int i = 0; i < numEdges; ++i) {
+    unsigned int begin, end;
+    int const readBeginStatus = fscanf(fin, "%u", &begin);
+    if (readBeginStatus == EOF || readBeginStatus == 0) {
+      delete_matrix(graph);
+      fclose(fin);
+      return BAD_INPUT;
+    }
+    int const readEndStatus = fscanf(fin, "%u", &end);
+    if (readEndStatus == EOF || readEndStatus == 0) {
+      delete_matrix(graph);
+      fclose(fin);
+      return BAD_INPUT;
+    }
+    add_edge(graph, begin, end);
+  }
+
+  fclose(fin);
+  return OK;
 }
