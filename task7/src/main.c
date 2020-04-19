@@ -18,11 +18,11 @@ Boolean check_way(Matrix const graph, Sequence const way) {
 error print_hamilton_way(Matrix const graph, char const *  const filename) {
   // Make start sequence:
   Sequence way = make_seq();
-  error const sinitStatus = init_seq(&way, graph.size);
+  error const initStatus = init_seq(&way, graph.size);
   if (initStatus != OK)
     return initStatus;
-  for (unsigned int i = 0; i < graph.size; ++i)
-    way.body[i] = i;
+  for (; way.length < graph.size; ++way.length)
+    way.body[way.length] = way.length;
 
   // Count number of potential ways:
   unsigned int numWays = 1;
