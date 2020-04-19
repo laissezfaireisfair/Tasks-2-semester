@@ -29,21 +29,22 @@ error print_hamilton_way(Matrix const graph, char const *  const filename) {
   for (unsigned int i = 2; i <= graph.size; ++i)
     numWays *= i;
 
-  // Gen way and check it's correctness:
+  FILE *fout = fopen(filename, "w");
+
+  // Gen way and print if correct:
   for (unsigned int i = 0; i < numWays; ++i) {
     error const genStatus = permutate_to_next(&way);
     if (genStatus != OK)
       return genStatus;
 
     if (check_way(graph, way)) {
-      FILE *fout = fopen(filename, "w");
       print_sequence(fout, way);
       fclose(fout);
       return OK;
     }
   }
 
-  FILE *fout = fopen(filename, "w");
+  // If all ways are not correct
   fprintf(fout, "NO\n");
   fclose(fout);
   return OK;
