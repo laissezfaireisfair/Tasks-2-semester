@@ -36,7 +36,7 @@ String pop_back(List *list) {
   // Deleting last element case
   if (list->head->next == NULL) {
     String lastValue = make_str();
-    copy_str(&lastValue, &list->head->value);
+    copy_str(&list->head->value, &lastValue);
     free(list->head);
     list->head = NULL;
     return lastValue;
@@ -46,7 +46,7 @@ String pop_back(List *list) {
   ListElem *preLast;
   for (preLast = list->head; preLast->next->next != NULL; preLast = preLast->next);
   String lastValue = make_str();
-  copy_str(&lastValue, &preLast->next->value);
+  copy_str(&preLast->next->value, &lastValue);
   free(preLast->next);
   preLast->next = NULL;
   return lastValue;
