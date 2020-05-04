@@ -9,14 +9,14 @@ List make_list() {
 
 void push_front(List *list, String const value) {
   ListElem *newElem = (ListElem*)malloc(sizeof(ListElem));
-  copy_str(&value, newElem->body);
+  copy_str(&value, &newElem->value);
   newElem->next = list->head;
   list->head = newElem;
 }
 
 void push_back(List *list, String const value) {
   ListElem *newElem = (ListElem*)malloc(sizeof(ListElem));
-  copy_str(&value, newElem->body);
+  copy_str(&value, &newElem->value);
   newElem->next = NULL;
 
   if (list->head == NULL) {
@@ -36,7 +36,7 @@ String pop_back(List *list) {
   // Deleting last element case
   if (list->head->next == NULL) {
     String lastValue = make_str();
-    copy_str(&lastValue, list->head->value);
+    copy_str(&lastValue, &list->head->value);
     free(list->head);
     list->head = NULL;
     return lastValue;
@@ -46,7 +46,7 @@ String pop_back(List *list) {
   ListElem *preLast;
   for (preLast = list->head; preLast->next->next != NULL; preLast = preLast->next);
   String lastValue = make_str();
-  copy_str(&lastValue, preLast->next->value);
+  copy_str(&lastValue, &preLast->next->value);
   free(preLast->next);
   preLast->next = NULL;
   return lastValue;
@@ -56,7 +56,7 @@ String pop_front(List *list) {
   assert(list->head != NULL);
 
   String lastValue = make_str();
-  copy_str(&lastValue, list->head->value);
+  copy_str(&lastValue, &list->head->value);
   ListElem *newHead = list->head->next;
   free(list->head);
   list->head = newHead;

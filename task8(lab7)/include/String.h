@@ -4,7 +4,7 @@
 #include "Errors.h"
 
 typedef struct _String {
-  unsigned char* body;
+  char* body;
   unsigned int length;
   unsigned int capacity;
 } String;
@@ -23,6 +23,6 @@ error ask_text(FILE* fin, String *out, unsigned int const maxLen);
 
 error print_string(FILE* fout, String const seq);
 
-error copy_str(String *this, String *out);
+error copy_str(String const *this, String *out);
 
-error compare_string(String *left, String *right, int *out);
+error compare_string(String const *left, String const *right, int *out);

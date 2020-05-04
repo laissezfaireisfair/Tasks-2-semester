@@ -15,7 +15,7 @@ error init_str(String *str, unsigned int capReq) {
     return NULL_POINTER;
   if (capReq == 0)
     return LENGTH_ERROR;
-  unsigned char *body = (unsigned char*)malloc(sizeof(unsigned char)*capReq);
+  char *body = (char*)malloc(sizeof(char)*capReq);
   if (body == NULL)
     return RUNTIME_ERROR;
   str->body = body;
@@ -114,7 +114,7 @@ error print_string(FILE* fout, String const str) {
   return OK;
 }
 
-error copy_str(String *this, String *out) {
+error copy_str(String const *this, String *out) {
   if (this == NULL || out == NULL)
     return NULL_POINTER;
   if (out->body != NULL)
@@ -127,22 +127,23 @@ error copy_str(String *this, String *out) {
     return RUNTIME_ERROR;
   out->capacity = this->capacity;
 
-  for (unsigned int i = 0; i < this->size; ++i, ++out.size)
+  for (unsigned int i = 0; i < this->length; ++i, ++out->length)
     out->body[i] = this->body[i];
   return OK;
 }
 
 
-error compare_string(String *left, String *right, int *out) {
+error compare_string(String const *left, String const *right, int *out) {
   if (left == NULL || right == NULL || out == NULL)
     return NULL_POINTER;
 
-  out = 0;
-  if (left->size != right->size)
-    return;
-  for (unsigned int i = 0; i < left->size; ++i)
+  *out = 0;
+  if (left->length != right->length)
+    return OK;
+  for (unsigned int i = 0; i < left->length; ++i)
     if (left->body[i] != right->body[i])
-      return;
+      return OK;
 
-  out = 1;
+  *out = 1;
+  return OK;
 }
