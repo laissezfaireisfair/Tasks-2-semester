@@ -126,8 +126,23 @@ error copy_str(String *this, String *out) {
   if (out->body == NULL)
     return RUNTIME_ERROR;
   out->capacity = this->capacity;
-  
+
   for (unsigned int i = 0; i < this->size; ++i, ++out.size)
     out->body[i] = this->body[i];
   return OK;
+}
+
+
+error compare_string(String *left, String *right, int *out) {
+  if (left == NULL || right == NULL || out == NULL)
+    return NULL_POINTER;
+
+  out = 0;
+  if (left->size != right->size)
+    return;
+  for (unsigned int i = 0; i < left->size; ++i)
+    if (left->body[i] != right->body[i])
+      return;
+
+  out = 1;
 }
