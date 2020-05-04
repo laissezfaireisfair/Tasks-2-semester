@@ -20,15 +20,17 @@ int main() {
   // Should be ["abc"]
   int cmp1;
   assert(compare_string(&str, &list.head->value, &cmp1) == OK);
-  if (cmp1 == 0)
+  if (cmp1 != 0)
     printf("Push back   - OK\n");
-  else
+  else {
     printf("Push back   - WRONG\n");
+    exit(1);
+  }
 
   String strFromList = pop_back(&list);
   // Should be []
   int cmp2;
-  assert(compare_string(&str, &list.head->value, &cmp2) == OK);
+  assert(compare_string(&str, &strFromList, &cmp2) == OK);
   if (cmp2 != 0 && list.head == NULL)
     printf("Pop back    - OK\n");
   else
