@@ -25,4 +25,4 @@ error print_string(FILE* fout, String const seq);
 
 error copy_str(String *this, String *out);
 
-error compare_string(String *left, String *right);
+error compare_string(String *left, String *right, int *out);
