@@ -22,3 +22,5 @@ error ask_string(FILE* fin, String *out, unsigned int const maxLen);
 error ask_text(FILE* fin, String *out, unsigned int const maxLen);
 
 error print_string(FILE* fout, String const seq);
+
+error copy_str(String *this, String *out);

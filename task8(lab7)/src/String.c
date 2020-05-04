@@ -113,3 +113,21 @@ error print_string(FILE* fout, String const str) {
   fprintf(fout, "\n");
   return OK;
 }
+
+error copy_str(String *this, String *out) {
+  if (this == NULL || out == NULL)
+    return NULL_POINTER;
+  if (out->body != NULL)
+    return INVALID_ARGUMENT;
+  if (this->body == NULL)
+    return OK;
+
+  out->body = (char*)malloc(sizeof(char) * this->capacity);
+  if (out->body == NULL)
+    return RUNTIME_ERROR;
+  out->capacity = this->capacity;
+  
+  for (unsigned int i = 0; i < this->size; ++i, ++out.size)
+    out->body[i] = this->body[i];
+  return OK;
+}
