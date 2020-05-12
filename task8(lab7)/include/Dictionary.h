@@ -1,5 +1,6 @@
 #pragma once
 #include <stdlib.h>
+#include "Errors.h"
 #include "String.h"
 #include "List.h"
 
@@ -9,6 +10,10 @@ typedef struct _Dictionary {
 } Dictionary;
 
 unsigned int hash(String const str);
+
+error init_dictionary(Dictionary *this);
+
+error delete_dictionary(Dictionary *this);
 
 error add_to_dict(Dictionary *this, String const entry);
 
