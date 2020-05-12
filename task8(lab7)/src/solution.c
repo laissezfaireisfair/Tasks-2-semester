@@ -12,7 +12,7 @@ int main() {
 
   Dictionary dictionary;
   init_dictionary(&dictionary);
-  FILE fin = fopen(inputFilename, "r");
+  FILE *fin = fopen(inputFilename, "r");
   if (fin == NULL) {
     print_error(outputFilename, RUNTIME_ERROR);
     delete_dictionary(&dictionary);

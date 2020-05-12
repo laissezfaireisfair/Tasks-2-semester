@@ -9,7 +9,7 @@ typedef struct _Dictionary {
   unsigned int size;
 } Dictionary;
 
-unsigned int hash(String const str);
+unsigned int count_hash(String const str);
 
 error init_dictionary(Dictionary *this);
 

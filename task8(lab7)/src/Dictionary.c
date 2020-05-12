@@ -1,6 +1,6 @@
 #include "Dictionary.h"
 
-unsigned int hash(String const str) {
+unsigned int count_hash(String const str) {
   unsigned int sumASII = 0;
   for (unsigned int i = 0; i < str.length; ++i)
     sumASII += str.body[i];
@@ -28,28 +28,28 @@ void delete_dictionary(Dictionary *this) {
 error add_to_dict(Dictionary *this, String const entry) {
   if (this == NULL)
     return NULL_POINTER;
-  if (entry.size == 0)
+  if (entry.length == 0)
     return INVALID_ARGUMENT;
 
-  unsigned int const hash = hash(entry);
+  unsigned int const hash = count_hash(entry);
   if (hash > 127)
     return INVALID_ARGUMENT;
 
-  push_front(this->body[hash], entry);
+  push_front(&this->body[hash], entry);
   return OK;
 }
 
 error is_entry_contained(Dictionary const *this, String const entry, int *out) {
   if (this == NULL || out == NULL)
     return NULL_POINTER;
-  if (entry.size == 0)
+  if (entry.length == 0)
     return INVALID_ARGUMENT;
 
-  unsigned int const hash = hash(entry);
+  unsigned int const hash = count_hash(entry);
   if (hash > 127)
     return INVALID_ARGUMENT;
 
-  for (ListElem *i = this->body[hash]->head; i != NULL; i = i->next) {
+  for (ListElem *i = this->body[hash].head; i != NULL; i = i->next) {
     int areEqual;
     error const cmpStatus = compare_string(&entry, &i->value, &areEqual);
     if (cmpStatus != OK)
