@@ -55,12 +55,12 @@ int main() {
   }
 
   fclose(fin);
-  deinit_str(&target);
   deinit_str(&str);
 
   int isInDictionary;
   error checkStatus = is_entry_contained(&dictionary, target, &isInDictionary);
   delete_dictionary(&dictionary);
+  deinit_str(&target);
   if (checkStatus != OK) {
     print_error(outputFilename, checkStatus);
     return 5;
