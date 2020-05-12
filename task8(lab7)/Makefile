@@ -4,11 +4,13 @@ CFLAGS = -Wall -Wextra -pedantic -g
 SOURCES = src/Errors.c src/solution.c src/Dictionary.c src/List.c src/String.c
 HEADERS = include/Errors.h include/Dictionary.h include/List.h include/String.h
 
-run: main.out input.txt
+run: main.out in.txt
 	echo "\n"
-	cat input.txt
+	cat in.txt
 	echo "\n"
 	./main.out
+	echo "\n"
+	cat out.txt
 
 test1: test1.out
 	echo "\n"
