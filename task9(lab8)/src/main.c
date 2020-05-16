@@ -3,15 +3,43 @@
 #include "Errors.h"
 #include "Constants.h"
 #include "Sequence.h"
-#include "Queue.h"
+#include "Queue.h" // should be replaced with priority queue
 #include "Matrix.h"
 
+// Warning: way is inverted
 error find_way(Matrix const graph, Sequence *way, long int *distances) {
   error const initSeqStatus = init_seq(way, graph.size); // The worst case when need visit all vertex
   if (initSeqStatus!= OK)
     return initSeqStatus;
   for (unsigned int i = 0; i < graph.size; ++i)
     distances[i] = -1;
+
+  int *parent = (int*)malloc(sizeof(int*) * graph.size);
+  if (parent == NULL)
+    return RUNTIME_ERROR;
+
+  Queue queue = make_queue();
+  push_to_queue(&queue, graph.start);
+
+  while(!is_queue_empty(queue)) {
+    int const vertexNow = pop_from_queue(&queue);
+    for (int i = 0; i < (int)graph.size; ++i) {
+      int const weight = check_edge(&graph, vertexNow, i);
+      if (weight == -1)
+        continue;
+      if (distances[i] == -1 || distances[i] > distances[vertexNow] + weight) {
+        push_to_queue(&queue, i);
+        parent[i] = vertexNow;
+      }
+    }
+  }
+
+  for (int i = graph.finish; i != (int)graph.start; i = parent[i], ++way->length)
+    way->body[way->length] = i;
+  way->body[way->length] = graph.start;
+  ++way->length;
+
+  free(parent);
   return OK;
 }
 
