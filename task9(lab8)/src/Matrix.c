@@ -67,6 +67,7 @@ error read_graph_from_file(Matrix * graph) {
     fclose(fin);
     return BAD_INPUT;
   }
+  --graph->start;
 
   int const finishReadStatus = fscanf(fin, "%u\n", &graph->finish);
   if (finishReadStatus == EOF || finishReadStatus == 0) {
@@ -74,6 +75,7 @@ error read_graph_from_file(Matrix * graph) {
     fclose(fin);
     return BAD_INPUT;
   }
+  --graph->finish;
 
   if (graph->start >= numVertex || graph->finish >= numVertex) {
     delete_matrix(graph);
@@ -115,10 +117,10 @@ error read_graph_from_file(Matrix * graph) {
       return BAD_INPUT;
     }
 
-    if (end >= numVertex || begin >= numVertex || weight > constants.MAX_INT)
+    if (end > numVertex || begin > numVertex || weight > constants.MAX_INT)
       return BAD_INPUT;
 
-    error const addStatus = add_edge(graph, begin, end, (int)weight);
+    error const addStatus = add_edge(graph, begin - 1, end - 1, (int)weight);
     if (addStatus != OK) {
       delete_matrix(graph);
       fclose(fin);
