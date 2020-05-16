@@ -6,7 +6,14 @@
 #include "Queue.h"
 #include "Matrix.h"
 
-error find_way(Matrix const graph, Sequence *way, unsigned int *distances) {}
+error find_way(Matrix const graph, Sequence *way, long int *distances) {
+  error const initSeqStatus = init_seq(way, graph.size); // The worst case when need visit all vertex
+  if (initSeqStatus!= OK)
+    return initSeqStatus;
+  for (unsigned int i = 0; i < graph.size; ++i)
+    distances[i] = -1;
+  return OK;
+}
 
 int main() {
   Constants const constants = get_constants();
@@ -19,28 +26,34 @@ int main() {
   }
 
   Sequence way = make_seq();
-  unsigned int *distances = NULL;
+  long int *distances = (long int*)malloc(sizeof(long int) * graph.size);
+  if (distances == NULL)
+    return RUNTIME_ERROR;
   error const findStatus = find_way(graph, &way, distances);
   if (findStatus != OK) {
     print_error(findStatus);
     delete_matrix(&graph);
+    free(distances);
     return 2;
   }
 
-  FILE *fout = fopen(constants.INPUT_FILENAME, "w");
+  FILE *fout = fopen(constants.OUTPUT_FILENAME, "w");
   if (fout == NULL) {
     print_error(RUNTIME_ERROR);
     delete_matrix(&graph);
+    free(distances);
     return 3;
   }
 
   for (unsigned int i = 0; i < graph.size; ++i) {
-    if (fprintf(fout, "%u ", distances[i]) < 1) {
+    if (fprintf(fout, "%lu ", distances[i]) < 1) {
       print_error(RUNTIME_ERROR);
       delete_matrix(&graph);
+      free(distances);
       return 4;
     }
   }
+  free(distances);
   fprintf(fout, "\n");
 
   error const printWayStatus = print_sequence(fout, way);
