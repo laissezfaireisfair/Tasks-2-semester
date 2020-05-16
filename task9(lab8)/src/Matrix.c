@@ -88,7 +88,7 @@ error read_graph_from_file(char const *filename, Matrix * graph) {
     if (end >= numVertex || begin >= numVertex || weight > constants.MAX_INT)
       return BAD_INPUT;
 
-    error const addStatus = add_edge(graph, begin, end, weight);
+    error const addStatus = add_edge(graph, begin, end, (int)weight);
     if (addStatus != OK) {
       delete_matrix(graph);
       fclose(fin);

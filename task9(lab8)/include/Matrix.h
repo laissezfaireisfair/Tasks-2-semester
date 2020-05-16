@@ -10,7 +10,7 @@ Matrix init_matrix(unsigned int const size);
 
 void delete_matrix(Matrix *this);
 
-error add_edge(Matrix *this, unsigned int const begin, unsigned int const end);
+error add_edge(Matrix *this, unsigned int const begin, unsigned int const end, int weight);
 
 error del_edge(Matrix *this, unsigned int const begin, unsigned int const end);
 
