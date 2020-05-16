@@ -61,20 +61,38 @@ error read_graph_from_file(char const *filename, Matrix * graph) {
     return BAD_INPUT;
   *graph = init_matrix(numVertex);
 
-  int const startReadStatus = fscanf(fin, "%u\n", &graph.start);
-  if (startReadStatus == EOF || startReadStatus == 0 || start >= numVertex)
+  int const startReadStatus = fscanf(fin, "%u\n", &graph->start);
+  if (startReadStatus == EOF || startReadStatus == 0) {
+    delete_matrix(graph);
+    fclose(fin);
     return BAD_INPUT;
+  }
 
-  int const finishReadStatus = fscanf(fin, "%u\n", &graph.finish);
-  if (finishReadStatus == EOF || finishReadStatus == 0 || finish >= numVertex)
+  int const finishReadStatus = fscanf(fin, "%u\n", &graph->finish);
+  if (finishReadStatus == EOF || finishReadStatus == 0) {
+    delete_matrix(graph);
+    fclose(fin);
     return BAD_INPUT;
+  }
+
+  if (graph->start >= numVertex || graph->finish >= numVertex) {
+    delete_matrix(graph);
+    fclose(fin);
+    return BAD_INPUT;
+  }
 
   unsigned int numEdges;
   int const edgesReadStatus = fscanf(fin, "%u\n", &numEdges);
-  if (edgesReadStatus == EOF || edgesReadStatus == 0)
+  if (edgesReadStatus == EOF || edgesReadStatus == 0) {
+    delete_matrix(graph);
+    fclose(fin);
     return BAD_INPUT;
-  if (numEdges > constants.MAX_EDGES)
+  }
+  if (numEdges > constants.MAX_EDGES) {
+    delete_matrix(graph);
+    fclose(fin);
     return BAD_INPUT;
+  }
 
   for (unsigned int i = 0; i < numEdges; ++i) {
     unsigned int begin, end, weight;
