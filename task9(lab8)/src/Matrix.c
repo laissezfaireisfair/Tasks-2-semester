@@ -54,13 +54,25 @@ error read_graph_from_file(char const *filename, Matrix * graph) {
 
   FILE *fin = fopen(filename, "r");
   unsigned int numVertex;
-  fscanf(fin, "%u\n", &numVertex);
+  int const vertexReadStatus = fscanf(fin, "%u\n", &numVertex);
+  if (vertexReadStatus == EOF || vertexReadStatus == 0)
+    return BAD_INPUT;
   if (numVertex > constants.MAX_VERTEX)
     return BAD_INPUT;
   *graph = init_matrix(numVertex);
 
+  int const startReadStatus = fscanf(fin, "%u\n", &graph.start);
+  if (startReadStatus == EOF || startReadStatus == 0 || start >= numVertex)
+    return BAD_INPUT;
+
+  int const finishReadStatus = fscanf(fin, "%u\n", &graph.finish);
+  if (finishReadStatus == EOF || finishReadStatus == 0 || finish >= numVertex)
+    return BAD_INPUT;
+
   unsigned int numEdges;
-  fscanf(fin, "%u\n", &numEdges);
+  int const edgesReadStatus = fscanf(fin, "%u\n", &numEdges);
+  if (edgesReadStatus == EOF || edgesReadStatus == 0)
+    return BAD_INPUT;
   if (numEdges > constants.MAX_EDGES)
     return BAD_INPUT;
 
