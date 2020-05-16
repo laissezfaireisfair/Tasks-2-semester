@@ -1,9 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "Constants.h"
 #include "Errors.h"
 
-void print_error(char const * const filename, error const err) {
-	FILE *fout = fopen(filename, "w");
+void print_error(error const err) {
+	Constants const constants = get_constants();
+
+	FILE *fout = fopen(constants.OUTPUT_FILENAME, "w");
 	if (fout == NULL)
 		exit(RUNTIME_ERROR);
   switch(err) {

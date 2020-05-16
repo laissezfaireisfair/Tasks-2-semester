@@ -49,10 +49,10 @@ int check_edge(Matrix const *this, unsigned int const begin, unsigned int const 
   return this->body[begin][end];
 }
 
-error read_graph_from_file(char const *filename, Matrix * graph) {
+error read_graph_from_file(Matrix * graph) {
   Constants const constants = get_constants();
 
-  FILE *fin = fopen(filename, "r");
+  FILE *fin = fopen(constants.INPUT_FILENAME, "r");
   unsigned int numVertex;
   int const vertexReadStatus = fscanf(fin, "%u\n", &numVertex);
   if (vertexReadStatus == EOF || vertexReadStatus == 0)

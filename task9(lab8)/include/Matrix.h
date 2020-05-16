@@ -18,4 +18,4 @@ error del_edge(Matrix *this, unsigned int const begin, unsigned int const end);
 
 int check_edge(Matrix const *this, unsigned int const begin, unsigned int const end);
 
-error read_graph_from_file(char const *filename, Matrix * graph);
+error read_graph_from_file(Matrix * graph);
