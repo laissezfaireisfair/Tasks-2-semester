@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "Sequence.h"
+#include "Constants.h"
 
 Sequence make_seq() {
   Sequence seq;
@@ -68,8 +69,15 @@ error print_revert_sequence(FILE* fout, Sequence const seq) {
   if (fout == NULL)
     return NULL_POINTER;
 
-  for (unsigned int i = 0; i < seq.length; ++i)
-    fprintf(fout, "%c ", seq.body[seq.length - i - 1] + '0');
+  Constants const constants = get_constants();
+
+  for (unsigned int i = 0; i < seq.length; ++i) {
+    long int const iValue = seq.body[seq.length - i - 1];
+    if (iValue <= constants.MAX_INT)
+      fprintf(fout, "%d ", (int)iValue);
+    else
+      fprintf(fout, "INT_MAX+");
+  }
 
   fprintf(fout, "\n");
   return OK;

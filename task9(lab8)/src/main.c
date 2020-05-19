@@ -8,6 +8,8 @@
 
 // Warning: way is inverted
 error find_way(Matrix const graph, Sequence *way, long int *distances) {
+  Constants const constants = get_constants();
+
   error const initSeqStatus = init_seq(way, graph.size); // The worst case when need visit all vertex
   if (initSeqStatus!= OK)
     return initSeqStatus;
@@ -37,7 +39,10 @@ error find_way(Matrix const graph, Sequence *way, long int *distances) {
         iVertex.priority = distances[vertexNow] + weight;
         push_to_queue(&queue, iVertex);
         parent[i] = vertexNow;
-        distances[i] = distances[vertexNow] + weight;
+        if (distances[vertexNow] + weight <= constants.MAX_INT)
+          distances[i] = distances[vertexNow] + weight;
+        else
+          distances[i] = constants.MAX_INT + 1; // Will be printed as INT_MAX+
       }
     }
   }
@@ -82,7 +87,15 @@ int main() {
   }
 
   for (unsigned int i = 0; i < graph.size; ++i) {
-    if (fprintf(fout, "%lu ", distances[i]) < 1) {
+    int printDistStatus = 0;
+    if (distances[i] > constants.MAX_INT)
+      printDistStatus = fprintf(fout, "INT_MAX+");
+    else if (distances[i] == -1)
+      printDistStatus = fprintf(fout, "NO_WAY");
+    else
+      printDistStatus = fprintf(fout, "%lu ", distances[i]);
+
+    if (printDistStatus < 1) {
       print_error(RUNTIME_ERROR);
       delete_matrix(&graph);
       free(distances);
