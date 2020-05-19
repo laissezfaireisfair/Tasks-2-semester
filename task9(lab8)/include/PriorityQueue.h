@@ -4,16 +4,16 @@
 
 // Minimum priority number pops first
 
-typedef struct _Queue {
+typedef struct _PriorityQueue {
   List body;
-} Queue;
+} PriorityQueue;
 
-Queue make_queue();
+PriorityQueue make_queue();
 
-void push_to_queue(Queue *queue, valType const value);
+void push_to_queue(PriorityQueue *queue, valType const value);
 
-valType pop_from_queue(Queue *queue);
+valType pop_from_queue(PriorityQueue *queue);
 
-void delete_queue(Queue *queue);
+void delete_queue(PriorityQueue *queue);
 
-int is_queue_empty(Queue const queue);
+int is_queue_empty(PriorityQueue const queue);

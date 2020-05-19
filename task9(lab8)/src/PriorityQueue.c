@@ -1,12 +1,12 @@
 #include "PriorityQueue.h"
 
-Queue make_queue() {
-  Queue queue;
+PriorityQueue make_queue() {
+  PriorityQueue queue;
   queue.body = make_list();
   return queue;
 }
 
-void push_to_queue(Queue *queue, PriorityVal const value) {
+void push_to_queue(PriorityQueue *queue, PriorityVal const value) {
   ListElem * const newElem = (ListElem*)malloc(sizeof(ListElem));
   newElem->value = value;
 
@@ -24,15 +24,15 @@ void push_to_queue(Queue *queue, PriorityVal const value) {
   i->next = newElem;
 }
 
-valType pop_from_queue(Queue *queue) {
+valType pop_from_queue(PriorityQueue *queue) {
   return pop_front(&queue->body);
 }
 
-void delete_queue(Queue *queue) {
+void delete_queue(PriorityQueue *queue) {
   delete_list(&queue->body);
 }
 
-int is_queue_empty(Queue const queue) {
+int is_queue_empty(PriorityQueue const queue) {
   if (queue.body.head == NULL)
     return 1;
   return 0;
