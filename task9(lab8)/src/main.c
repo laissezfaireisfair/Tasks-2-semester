@@ -3,7 +3,7 @@
 #include "Errors.h"
 #include "Constants.h"
 #include "Sequence.h"
-#include "Queue.h" // should be replaced with priority queue
+#include "PriorityQueue.h"
 #include "Matrix.h"
 
 // Warning: way is inverted
@@ -19,16 +19,22 @@ error find_way(Matrix const graph, Sequence *way, long int *distances) {
     return RUNTIME_ERROR;
 
   Queue queue = make_queue();
-  push_to_queue(&queue, graph.start);
+  PriorityVal startVertex;
+  startVertex.value = graph.start;
+  startVertex.priority = 0;
+  push_to_queue(&queue, startVertex);
 
   while(!is_queue_empty(queue)) {
-    int const vertexNow = pop_from_queue(&queue);
+    int const vertexNow = pop_from_queue(&queue).value;
     for (int i = 0; i < (int)graph.size; ++i) {
       int const weight = check_edge(&graph, vertexNow, i);
       if (weight == -1)
         continue;
       if (distances[i] == -1 || distances[i] > distances[vertexNow] + weight) {
-        push_to_queue(&queue, i);
+        PriorityVal iVertex;
+        iVertex.value = i;
+        iVertex.priority = distances[i];
+        push_to_queue(&queue, iVertex);
         parent[i] = vertexNow;
       }
     }

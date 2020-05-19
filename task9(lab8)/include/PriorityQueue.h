@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "List.h"
 
+// Minimum priority number pops first
+
 typedef struct _Queue {
   List body;
 } Queue;

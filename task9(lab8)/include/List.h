@@ -1,7 +1,12 @@
 #pragma once
 #include <stdlib.h>
 
-typedef int valType;
+typedef struct _PriorityVal {
+  int priority;
+  int value;
+} PriorityVal;
+
+typedef PriorityVal valType;
 
 typedef struct _ListElem {
   valType value;

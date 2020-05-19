@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -pedantic -g
 
-SOURCES = src/Errors.c src/main.c src/Matrix.c src/Queue.c src/Sequence.c src/List.c src/Constants.c
-HEADERS = include/Constants.h include/Errors.h include/Matrix.h include/Queue.h include/Sequence.h include/List.h
+SOURCES = src/Errors.c src/main.c src/Matrix.c src/PriorityQueue.c src/Sequence.c src/List.c src/Constants.c
+HEADERS = include/Constants.h include/Errors.h include/Matrix.h include/PriorityQueue.h include/Sequence.h include/List.h
 
 run: main.out input.txt
 	echo "\n"
