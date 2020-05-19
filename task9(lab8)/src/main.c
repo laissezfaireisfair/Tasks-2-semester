@@ -47,6 +47,11 @@ error find_way(Matrix const graph, Sequence *way, long int *distances) {
     }
   }
 
+  if (distances[graph.finish] == -1) {
+    free(parent);
+    return OK;
+  }
+
   for (int i = graph.finish; i != (int)graph.start; i = parent[i], ++way->length)
     way->body[way->length] = i;
   way->body[way->length] = graph.start;
@@ -91,7 +96,7 @@ int main() {
     if (distances[i] > constants.MAX_INT)
       printDistStatus = fprintf(fout, "INT_MAX+");
     else if (distances[i] == -1)
-      printDistStatus = fprintf(fout, "NO_WAY");
+      printDistStatus = fprintf(fout, "NO_PATH");
     else
       printDistStatus = fprintf(fout, "%lu ", distances[i]);
 
@@ -102,8 +107,22 @@ int main() {
       return 4;
     }
   }
-  free(distances);
+
   fprintf(fout, "\n");
+
+  if (distances[graph.finish] > constants.MAX_INT) {
+    fprintf(fout, "overflow\n");
+    free(distances);
+    delete_matrix(&graph);
+    return 0;
+  } else if (distances[graph.finish] == -1) {
+    fprintf(fout, "no path\n");
+    free(distances);
+    delete_matrix(&graph);
+    return 0;
+  }
+
+  free(distances);
 
   error const printWayStatus = print_revert_sequence(fout, way);
   if (printWayStatus != OK) {
