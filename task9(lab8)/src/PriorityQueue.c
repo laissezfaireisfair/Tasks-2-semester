@@ -9,13 +9,17 @@ Queue make_queue() {
 void push_to_queue(Queue *queue, PriorityVal const value) {
   ListElem * const newElem = (ListElem*)malloc(sizeof(ListElem));
   newElem->value = value;
-  if (queue->body.head->value.priority < value.priority) {
+
+  // Inserting to head case
+  if (queue->body.head == NULL || queue->body.head->value.priority > value.priority) {
     newElem->next = queue->body.head;
     queue->body.head = newElem;
     return;
   }
+
+  // Inserting NOT to head case
   ListElem *i = queue->body.head;
-  while (i->next != NULL && i->next->value.priority >= value.priority) {}
+  while (i->next != NULL && i->next->value.priority <= value.priority) {}
   newElem->next = i->next;
   i->next = newElem;
 }

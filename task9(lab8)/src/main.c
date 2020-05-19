@@ -13,6 +13,7 @@ error find_way(Matrix const graph, Sequence *way, long int *distances) {
     return initSeqStatus;
   for (unsigned int i = 0; i < graph.size; ++i)
     distances[i] = -1;
+  distances[graph.start] = 0;
 
   int *parent = (int*)malloc(sizeof(int*) * graph.size);
   if (parent == NULL)
@@ -33,9 +34,10 @@ error find_way(Matrix const graph, Sequence *way, long int *distances) {
       if (distances[i] == -1 || distances[i] > distances[vertexNow] + weight) {
         PriorityVal iVertex;
         iVertex.value = i;
-        iVertex.priority = distances[i];
+        iVertex.priority = distances[vertexNow] + weight;
         push_to_queue(&queue, iVertex);
         parent[i] = vertexNow;
+        distances[i] = distances[vertexNow] + weight;
       }
     }
   }
