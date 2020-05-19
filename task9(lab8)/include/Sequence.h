@@ -17,4 +17,4 @@ void deinit_seq(Sequence *seq);
 
 error ask_sequence(FILE* fin, Sequence *out, unsigned int const maxLen);
 
-error print_sequence(FILE* fout, Sequence const seq);
+error print_revert_sequence(FILE* fout, Sequence const seq);

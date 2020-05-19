@@ -92,7 +92,7 @@ int main() {
   free(distances);
   fprintf(fout, "\n");
 
-  error const printWayStatus = print_sequence(fout, way);
+  error const printWayStatus = print_revert_sequence(fout, way);
   if (printWayStatus != OK) {
     print_error(printWayStatus);
     delete_matrix(&graph);
